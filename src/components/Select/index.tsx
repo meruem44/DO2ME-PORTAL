@@ -2,8 +2,6 @@ import React from 'react';
 
 import { Container, Selected, Label, Option } from './styles';
 
-import { AiFillDownCircle } from 'react-icons/ai';
-import { colors } from '../../styles';
 
 const Select: React.FC = () => {
   return (

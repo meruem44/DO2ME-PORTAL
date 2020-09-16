@@ -1,9 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 
 import { Container } from './styles';
 
 import List from '../List';
-import { fireStore } from '../../config/firebase';
 
 interface PlusServiceInterface {
     id: string;
@@ -18,7 +17,6 @@ interface PropsListSection {
 };
 
 const ListSection: React.FC<PropsListSection> = ({ selectedSection, plusServices, active, plusService }) => {
-    const [areas, setAreas] = useState<PlusServiceInterface[] | []>([]);
 
 
   return (

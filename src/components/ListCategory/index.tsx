@@ -1,9 +1,8 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React from 'react';
 
 import { Container } from './styles';
 
 import List from '../List';
-import { fireStore } from '../../config/firebase';
 
 interface CategoryInterface {
     id: string;
@@ -18,8 +17,6 @@ interface PropsListSection {
 };
 
 const ListSection: React.FC<PropsListSection> = ({ selectedCategory, categorys, active, category }) => {
-    const [areas, setAreas] = useState<CategoryInterface[] | []>([]);
-
 
   return (
       <Container>

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 
 import {
     Container,
@@ -11,7 +11,6 @@ import { AiFillPlusCircle } from 'react-icons/ai';
 import { colors } from '../../styles';
 
 const InputImage: React.FC = () => {
-    const inputFileRef = useRef<HTMLInputElement>(null)
 
   return (
       <Container>

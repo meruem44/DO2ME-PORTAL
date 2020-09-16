@@ -33,6 +33,7 @@ const Home: React.FC = () => {
 
   // Escolhendo a Área
   const selectedArea = (area: DefaultInterface) => {
+    setPlusServiceSelected({} as DefaultInterface)
     setAreaSelected(area);
     setPage(1);
 

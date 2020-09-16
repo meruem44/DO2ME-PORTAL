@@ -4,7 +4,6 @@ import { fireStore } from '../../config/firebase';
 import { Container } from './styles';
 
 import List from '../List';
-import CardEditArea from '../Cards/CardsEditArea';
 
 interface AreaInterface {
     id: string;
