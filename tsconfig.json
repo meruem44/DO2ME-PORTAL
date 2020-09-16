@@ -20,7 +20,6 @@
     "jsx": "react",
     "outDir": "./dist",
     "rootDir": "./src",
-    "@typescript-eslint/no-unused-vars": 0; 
   },
   "include": [
     "src"
