@@ -18,7 +18,6 @@ interface PropsListArea {
 
 const ListArea: React.FC<PropsListArea> = ({ selectedArea, active, area }) => {
     const [areas, setAreas] = useState<AreaInterface[] | []>([]);
-    const [viewModal, setViewModal] = useState(false);
 
     const loadAreas = useCallback(() => {
       fireStore.collection('tb_area')
@@ -37,7 +36,7 @@ const ListArea: React.FC<PropsListArea> = ({ selectedArea, active, area }) => {
     
       useEffect(() => {
         loadAreas();
-      }, []);
+      }, [loadAreas]);
 
   return (
       <Container>
