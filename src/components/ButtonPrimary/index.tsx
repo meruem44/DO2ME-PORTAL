@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 
 import { Button, Text } from './styles';
 
-interface PropsButton {
+interface PropsButton extends ButtonHTMLAttributes<HTMLButtonElement>{
     text: string;
-    secundary: boolean ;
+    secundary: boolean;
+    onPress(data?: object): void;
 }
 
-const ButtonPrimary: React.FC<PropsButton> = ({ text, secundary }) => {
+const ButtonPrimary: React.FC<PropsButton> = ({ text, secundary, onPress, ...res }) => {
   return (
-      <Button secundary={secundary}>
+      <Button {...res} secundary={secundary} onClick={() => onPress()}>
           <Text>{text}</Text>
       </Button>
   );

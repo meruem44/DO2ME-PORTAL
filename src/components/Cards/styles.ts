@@ -2,11 +2,7 @@ import styled from 'styled-components';
 import { colors } from '../../styles';
 
 export const Container = styled.div`
-  width: 30%;
-  max-width: 300px;
-  border: 1px solid ${colors.base};
-  border-radius: 10px;
-  padding: 15px;
+  width: 100%;
 `;
 
 export const Title = styled.h1`

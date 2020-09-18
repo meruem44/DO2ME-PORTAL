@@ -14,14 +14,17 @@ interface PropsListSection {
     plusServices: PlusServiceInterface[] | [];
     active: boolean;
     plusService: PlusServiceInterface | false;
+    handleAdd(type: number): void;
 };
 
-const ListSection: React.FC<PropsListSection> = ({ selectedSection, plusServices, active, plusService }) => {
+const ListSection: React.FC<PropsListSection> = ({ selectedSection, plusServices, active, plusService, handleAdd }) => {
 
 
   return (
       <Container>
           <List 
+            type={5}
+            handleAdd={handleAdd}
             active={active} 
             onPress={selectedSection}
             data={plusServices} 

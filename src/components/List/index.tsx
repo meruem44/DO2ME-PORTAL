@@ -17,11 +17,13 @@ interface PropsList {
     title: string;
     data: DataInterface[];
     active: boolean;
+    type: number;
     onPress(item: DefaultInterface):void;
     itemSelected: DataInterface | false;
+    handleAdd(type: number): void;
 }
 
-const List: React.FC<PropsList> = ({ title, data, active, onPress, itemSelected }) => {
+const List: React.FC<PropsList> = ({ title, data, active, onPress, itemSelected, handleAdd, type }) => {
 
   const handleActive = (active: boolean | DataInterface, item: DataInterface) => {
     if (typeof active === 'boolean') return false;
@@ -35,7 +37,7 @@ const List: React.FC<PropsList> = ({ title, data, active, onPress, itemSelected 
             <p>{title}</p>
 
            {active && (
-              <button>
+              <button onClick={() => handleAdd(type)}>
               <AiFillPlusCircle 
               size={25}
               color={colors.contrast} />

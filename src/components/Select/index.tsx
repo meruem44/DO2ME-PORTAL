@@ -2,14 +2,20 @@ import React from 'react';
 
 import { Container, Selected, Label, Option } from './styles';
 
+interface PropsSelecte {
+    label: string;
+    data: any[];
+};
 
-const Select: React.FC = () => {
+const Select: React.FC<PropsSelecte> = ({ label, data }) => {
   return (
       <Container>
-          <Label>Teste</Label>
+          <Label>{label}</Label>
          
           <Selected>
-              <Option>Leandro</Option>
+              {data.map(item => (
+                  <Option>{item.label}</Option>
+              ))}
           </Selected>
       </Container>
   );

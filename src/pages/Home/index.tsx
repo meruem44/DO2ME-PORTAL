@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { fireStore } from '../../config/firebase';
 
-import { Container, ContainerList } from './styles';
+import { Container, ContainerList, ContainerCard } from './styles';
 import DefaultInterface from '../../models/defaultInterface';
 
 import ListArea from '../../components/ListArea';
@@ -15,6 +15,11 @@ import CardEdit from '../../components/Cards';
 
 const Home: React.FC = () => {
   const [page, setPage] = useState(0); // Definir o index da seleção.
+  const [typeCard, setTypeCard] = useState(0);
+  const [openCard, setOpenCard] = useState(false);
+  const [idSelected, setIdSelected] = useState('');
+  const [handleSelected, setHandleSelected] = useState<DefaultInterface>({} as DefaultInterface);
+  const [areas, setAreas] = useState<DefaultInterface[] | []>([]);
 
   const [areaselected, setAreaSelected] = useState<DefaultInterface>({}  as DefaultInterface);
   const [sectionSelected, setsectionSelected] = useState<DefaultInterface>({} as DefaultInterface);
@@ -29,12 +34,39 @@ const Home: React.FC = () => {
   const [services, setServices] = useState<DefaultInterface[]>([]);
   const [plusServices, setPlusServices] = useState<DefaultInterface[]>([]);
 
+  const handleAdd = (type: number) => {
+    setTypeCard(type);
+    setOpenCard(true);
+  };
+
+  const loadAreas = () => {
+    fireStore.collection('tb_area')
+      .get()
+      .then(response => {
+        const res = response.docs.map(area => ({
+          id: area.id,
+          ...area.data()
+        } as DefaultInterface))
   
+        setAreas(res)
+      }).catch(err => {
+  
+      })
+  };
+  
+    useEffect(() => {
+      loadAreas();
+    }, [loadAreas]);
 
   // Escolhendo a Área
   const selectedArea = (area: DefaultInterface) => {
+    setOpenCard(true);
+    setIdSelected(area.id);
+    setTypeCard(0);
+
     setPlusServiceSelected({} as DefaultInterface)
     setAreaSelected(area);
+    setHandleSelected(area);
     setPage(1);
 
     setServices([]);
@@ -145,16 +177,24 @@ const Home: React.FC = () => {
     });
   };
 
+  const handleRefresh = () => {
+    setOpenCard(false);
+    loadAreas();
+  };
+
   return (
       <Container>
           <ContainerList>
             <ListArea 
+              handleAdd={handleAdd}
               selectedArea={selectedArea}
               active={true}
+              areas={areas}
               area={areaselected}
             />
 
             <ListSection 
+              handleAdd={handleAdd}
               selectedSection={selectedSection}
               sections={sections}
               active={page > 0}
@@ -162,6 +202,7 @@ const Home: React.FC = () => {
             />
 
             <ListCategory 
+               handleAdd={handleAdd}
               selectedCategory={selectedCategory}
               categorys={categorys}
               active={page > 1}
@@ -169,6 +210,7 @@ const Home: React.FC = () => {
             />
 
             <ListServiceSection 
+               handleAdd={handleAdd}
               selectedServiceSection={selectedServiceSection}
               serviceSections={serviceSections}
               active={page > 2}
@@ -176,6 +218,7 @@ const Home: React.FC = () => {
             />
 
             <ListServices 
+               handleAdd={handleAdd}
               selectedService={selectedService}
               services={services}
               active={page > 3}
@@ -183,6 +226,7 @@ const Home: React.FC = () => {
             />
 
           <ListPlusServices 
+               handleAdd={handleAdd}
               selectedSection={selectedSection}
               active={page > 4}
               plusServices={plusServices}
@@ -190,7 +234,15 @@ const Home: React.FC = () => {
             />
           </ContainerList>
 
-          <CardEdit type={0}/>
+          {openCard && (
+            <ContainerCard>
+              <CardEdit
+              handleSelected={handleSelected} 
+              handleRefresh={handleRefresh}
+              idSelected={idSelected}
+              type={typeCard}/>
+            </ContainerCard>
+          )}
       </Container>
   );
 }

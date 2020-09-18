@@ -15,3 +15,8 @@ export const ContainerList = styled.div`
     flex-wrap: wrap;   
     justify-content: center;
 `;
+
+
+export const ContainerCard = styled.div`
+    width: 30%;
+`;

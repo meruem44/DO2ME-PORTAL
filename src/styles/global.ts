@@ -12,7 +12,7 @@ export default createGlobalStyle`
         height: 100vh;
     }
 
-    button, input, * {
+    button, input, textarea,* {
         font-family: Lato, sans-serif;
     }
 

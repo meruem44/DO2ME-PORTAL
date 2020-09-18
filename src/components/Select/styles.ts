@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import { colors, metrics } from '../../styles';
 
 export const Container = styled.div`
-  width: 70%;
+  width: 100%;
+  margin-top: 10px;
 `;
 
 export const Label = styled.p`

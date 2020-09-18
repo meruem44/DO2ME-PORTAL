@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, metrics } from '../../../styles';
+import { colors } from '../../../styles';
 
 import { Form } from '@unform/web';
 
@@ -13,7 +13,7 @@ export const Container = styled(Form)`
 `;
 
 export const Title = styled.h1`
- font-size: ${metrics.large};
+ font-size: 24px;
  color:${colors.base};
 `;
 
@@ -22,6 +22,7 @@ export const ContentTax = styled.div`
  `;
 
 export const Footer = styled.div` 
+margin-top: 20px;
  display: flex;
  width: 100%;
  justify-content: space-between;

@@ -13,37 +13,21 @@ interface AreaInterface {
 interface PropsListArea {
     selectedArea(item: AreaInterface): void;
     active: boolean;
-    area: AreaInterface | false;
+    handleAdd(type: number): void;
+    areas: AreaInterface[];
+    area: AreaInterface;
 };
 
-const ListArea: React.FC<PropsListArea> = ({ selectedArea, active, area }) => {
-    const [areas, setAreas] = useState<AreaInterface[] | []>([]);
-
-    const loadAreas = useCallback(() => {
-      fireStore.collection('tb_area')
-        .get()
-        .then(response => {
-          const res = response.docs.map(area => ({
-            id: area.id,
-            ...area.data()
-          } as AreaInterface))
-    
-          setAreas(res)
-        }).catch(err => {
-    
-        })
-      }, []);
-    
-      useEffect(() => {
-        loadAreas();
-      }, [loadAreas]);
+const ListArea: React.FC<PropsListArea> = ({ selectedArea, active, handleAdd, areas, area }) => {    
 
   return (
       <Container>
             <List 
+            type={0}
             active={active} 
             onPress={selectedArea}
             data={areas}
+            handleAdd={handleAdd}
             itemSelected={area} 
             title="Área" />
       </Container>

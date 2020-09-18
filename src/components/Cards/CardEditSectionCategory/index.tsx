@@ -1,8 +1,4 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import * as yup from 'yup';
-
-import { FormHandles } from '@unform/core';
-import getValidationErros from '../../../utils/getValidationErros';
 
 import { 
   Container, 
@@ -14,10 +10,11 @@ import {
 
 import Input from '../../Inputs/DefaultInput';
 import InputImage from '../../Inputs/InputImage';
-import InputMult from '../../Inputs/InputMult';
-import InputCheck from '../../Inputs/InputCheck';
+import Check from '../../CheckBox';
 import Button from '../../ButtonPrimary';
 import PickerColor from '../../PickerColor';
+import Select from '../../Select';
+
 import { fireStore } from '../../../config/firebase';
 
 import DefaultInterface from '../../../models/defaultInterface';
@@ -25,26 +22,23 @@ import DefaultInterface from '../../../models/defaultInterface';
 interface PropsCardArea {
   handleRefresh(): void;
   idSelected?: string;
-  handleSelected?: DefaultInterface;
+  handleSelected : DefaultInterface;
 };
 
-interface Area {
+interface Section {
   id: string;
   idArea: string;
-  color: string;
   label: string;
-  description: string;
-  tax: string;
+  image: string;
+  idSection: string;
 };
 
-const CardsEditArea: React.FC<PropsCardArea> = ({ handleRefresh, idSelected, handleSelected }) => {
-  const formRef = useRef<FormHandles>(null);
-
-  console.log(idSelected);
+const CardEditSectionCategory: React.FC<PropsCardArea> = ({ handleRefresh, idSelected, handleSelected }) => {
 
   const [initialData, setInitialData] = useState({});
 
-  const [area, setArea] = useState<Area>({} as Area);
+  const [area, setArea] = useState<Section>({} as Section);
+  const [section, setSection] = useState(false);
   const [image, setimage] = useState('');
   const [color, setColor] = useState('');
   const [error, setError] = useState(false);
@@ -56,23 +50,20 @@ const CardsEditArea: React.FC<PropsCardArea> = ({ handleRefresh, idSelected, han
   }, []);
 
   const loadInitial = useCallback((id) => {
-    fireStore.collection('tb_area').doc(id).get()
+    fireStore.collection('tb_sectionArea').doc(id).get()
     .then(response => {
 
-      const areaValue = {
+      const sectionValue = {
         id: response.id,
         ...response.data()
-      } as Area
+      } as Section
 
-      setArea(areaValue)
+      setArea(sectionValue)
 
       setInitialData({
-        label: areaValue.label,
-        description: areaValue.description,
-        tax: areaValue.tax,
+        label: sectionValue.label,
+        image: sectionValue.image,
       });
-
-      setColor(areaValue.color);
 
     }).catch(err => {
 
@@ -81,37 +72,36 @@ const CardsEditArea: React.FC<PropsCardArea> = ({ handleRefresh, idSelected, han
 
   const handleSubmit = async (data: any) => {
 
-     const areaRef = fireStore.collection('tb_area');
+    console.log(data);
 
-     const BODY = {
-        ...data,
-        color
-     }
-
-     areaRef.doc().set({
-      ...BODY
+     const areaRef = fireStore.collection('tb_sectionArea');
+     areaRef.add({
+       ...data,
+       color,
+       idArea: handleSelected.id
      }).then(ref => {
-      handleRefresh();
+       areaRef.doc(ref.id).update({
+         idSection: ref.id
+       }).then(response => {
+        handleRefresh();
+       }).catch(err => {
+       })
      }).catch(err => {
 
      }); 
-
-    //  areaRef.doc(ref.id).update({
-    //   idArea: ref.id
-    // }).then(response => {
-     
-    // }).catch(err => {
-
-    // })
   };
-
   return (
       <Container initialData={initialData} onSubmit={handleSubmit}>
-        <Title>Area</Title>
+        <Title>Seção da Categoria</Title>
+
+        <Check 
+        active={section}
+        onChange={() => setSection(!section)}
+        label={`Posibilitar "Sem Seção da categoria"`} />
 
         <Input 
-          name="label"
-          label="NomeClatura"
+        label="NomeClatura"
+        name="label"
         />
         
         <Group>
@@ -126,37 +116,26 @@ const CardsEditArea: React.FC<PropsCardArea> = ({ handleRefresh, idSelected, han
             value={color}
             onChange={setColor}
           />
-
         </Group>
 
-        <InputMult 
-          label="Descrição"
-          name="description"
+        <Select 
+          label="VINCULADO A ÁREA"
+          data={[{ label: handleSelected.label }]}
         />
 
-        <ContentTax>
-        <InputCheck 
-          error={false}
-          label="Taxa App Área"
-          placeholder="00.0%"
-          name="tax"
+        <Input 
+          label="POSIÇÃO DO ITEM NA ÁREA"
+          type="number"
+          name="position"
         />
-
-        <InputCheck 
-          error={false}
-          label="Mensalidade"
-          placeholder="0,00"
-          name="mensal"
-        />
-        </ContentTax>
 
         <Footer>
           <Button text="Excluir" onPress={() => {}} secundary={true}/>
-          <Button text="Salvar" type="submit" onPress={handleSubmit} secundary={false}/>
+          <Button text="Salvar" onPress={handleSubmit} secundary={false}/>
         </Footer>
            
       </Container>
   );
 }
 
-export default CardsEditArea;
+export default CardEditSectionCategory;

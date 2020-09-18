@@ -1,9 +1,14 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-import { colors, metrics } from '../../styles';
+import { colors, metrics } from '../../../styles';
+
+interface PropsInput {
+  error: boolean;
+}
 
 export const Container = styled.div`
   width: 100%;
+  margin-top: 10px;
 `;
 
 export const Label = styled.p`
@@ -12,7 +17,7 @@ export const Label = styled.p`
     text-transform: uppercase;
 `;
 
-export const Input = styled.input`
+export const Input = styled.input<PropsInput>`
   width: 100%;
   padding: 0 5px;
   border-top: 0;
@@ -21,4 +26,8 @@ export const Input = styled.input`
   color: ${colors.light};
   font-size: ${metrics.small};
   border-bottom: 1px solid  ${colors.base};
+
+  ${({ error }) => error && css`
+    border-bottom: 1px solid  ${colors.contrast};
+  `}
 `;
